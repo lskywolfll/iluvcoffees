@@ -9,7 +9,7 @@ import { CoffeesModule } from './coffees/coffees.module';
     CoffeesModule,
     TypeOrmModule.forRoot({
       type: 'postgres', // type of our database
-      host: '172.18.0.3', // database host
+      host: '172.18.0.2', // database host
       port: 5432, // database host
       username: 'postgres', // username
       password: 'admin', // user password

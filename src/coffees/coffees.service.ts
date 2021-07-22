@@ -1,5 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { validate, validateOrReject, ValidationError } from 'class-validator';
+import { EmailOfuscateDto } from 'src/common/dto/email-ofuscate.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { Event } from 'src/events/entities/event.entity';
 import { Connection, Repository } from 'typeorm';
@@ -21,7 +28,7 @@ export class CoffeesService {
   findAll(paginationQuery: PaginationQueryDto) {
     const { limit, offset } = paginationQuery;
     return this.coffeeRepository.find({
-      skip: offset,
+      skip: offset ? offset : 0,
       take: limit,
     });
   }
@@ -75,6 +82,41 @@ export class CoffeesService {
       return existingFlavor;
     }
     return this.flavorRepository.create({ name });
+  }
+
+  // Example Error Nestjs by Request have property email validator
+  // "statusCode": 400,
+  // "message": [
+  //     "email should not be empty",
+  //     "email must be an email"
+  // ],
+  // "error": "Bad Request"
+
+  async testing(email: string, email2: string) {
+    const emailOfuscateDto = new EmailOfuscateDto();
+    emailOfuscateDto.email = email;
+    emailOfuscateDto.email2 = email2;
+
+    try {
+      await validateOrReject(emailOfuscateDto);
+      return 'ofuscate';
+    } catch (errors) {
+      const listErrors = [];
+      for (const iterator of errors) {
+        const targetErrorMsg = iterator.constraints;
+        for (const key in targetErrorMsg) {
+          if (Object.prototype.hasOwnProperty.call(targetErrorMsg, key)) {
+            const element = targetErrorMsg[key];
+            listErrors.push(element);
+          }
+        }
+      }
+
+      throw new InternalServerErrorException(
+        listErrors,
+        'Bad Process ofuscate',
+      );
+    }
   }
 
   async recommendCoffe(coffee: Coffee) {
