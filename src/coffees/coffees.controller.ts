@@ -24,7 +24,7 @@ export class CoffeesController {
 
   @Get('/testing')
   test() {
-    return this.coffeesService.testing('', 'alexasgmail.com');
+    return this.coffeesService.testingEmailOfuscate('testingeamal@gmail.com');
   }
 
   @Get(':id')

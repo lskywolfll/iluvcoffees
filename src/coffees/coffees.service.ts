@@ -92,14 +92,13 @@ export class CoffeesService {
   // ],
   // "error": "Bad Request"
 
-  async testing(email: string, email2: string) {
+  async testingEmailOfuscate(email: string) {
     const emailOfuscateDto = new EmailOfuscateDto();
     emailOfuscateDto.email = email;
-    emailOfuscateDto.email2 = email2;
 
     try {
       await validateOrReject(emailOfuscateDto);
-      return 'ofuscate';
+      return emailOfuscateDto.ofuscateEmail();
     } catch (errors) {
       const listErrors = [];
       for (const iterator of errors) {
