@@ -1,11 +1,10 @@
 import {
-  HttpException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { validate, validateOrReject, ValidationError } from 'class-validator';
+import { validateOrReject } from 'class-validator';
 import { EmailOfuscateDto } from 'src/common/dto/email-ofuscate.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { Event } from 'src/events/entities/event.entity';
